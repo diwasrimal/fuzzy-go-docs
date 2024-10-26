@@ -3,7 +3,7 @@
 The scripts in this repository, mainly `fzgd` (fuzzy go docs) lets you browse Go stdlib documentation
 using fzf. It gives both package and symbol documentation
 
-[video]
+https://github.com/user-attachments/assets/cf8d3182-2fe2-4853-b406-1b13009d447e
 
 ### Requirements
 * `fzf`
