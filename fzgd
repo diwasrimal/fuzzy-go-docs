@@ -7,6 +7,7 @@
 gen_cache() {
 	out=$1
 	pkgs=$(go list std)
+	echo "$pkgs" > "$db/_pkgs.txt"
 	for pkg in $pkgs; do
 		mkdir -p $out/$pkg
 		go doc $pkg > "$out/$pkg/_doc.txt"
@@ -42,14 +43,13 @@ save_browsing_pkg="echo {} > $db/browsing_pkg.txt"
 get_browsing_pkg="cat $db/browsing_pkg.txt"
 sym_extractor="$(dirname $0)/fzgd-extract-sym-from-line"
 
-find $db -type d -mindepth 1 \
-	| sed "s:^$db/::" \
+cat "$db/_pkgs.txt" \
 	| fzf --preview "$cat $db/{}/_doc.txt" \
 		  --preview-window "right:70%" \
 		  --bind "change:first" \
 		  --bind "ctrl-j:preview-half-page-down,ctrl-k:preview-half-page-up" \
 		  --bind "tab:reload($save_browsing_pkg && cat $db/{}/_signatures.txt)+change-preview($cat $db/\$($get_browsing_pkg)/\$($sym_extractor {}).txt)+change-query()+change-preview-window(bottom:60%)" \
-		  --bind "shift-tab:reload(find $db -type d -mindepth 1 | sed "s:^$db/::")+change-query()+change-preview($cat $db/{}/_doc.txt)+change-preview-window(right:70%)"
+		  --bind "shift-tab:reload(cat $db/_pkgs.txt)+change-query()+change-preview($cat $db/{}/_doc.txt)+change-preview-window(right:70%)"
 
 	
 
